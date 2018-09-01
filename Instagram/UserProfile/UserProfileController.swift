@@ -26,6 +26,8 @@ class UserProfileController: UICollectionViewController {
         collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: CELL_ID)
         
         fetchUser()
+        
+        setupLogOutButton()
     }
     
     fileprivate func fetchUser() {
@@ -35,6 +37,7 @@ class UserProfileController: UICollectionViewController {
             
             if let error = error {
                 print("Failed to fetchUser: ", error.localizedDescription)
+                
                 return
             }
             
@@ -45,6 +48,30 @@ class UserProfileController: UICollectionViewController {
             
             self.collectionView?.reloadData()
         }
+    }
+    
+    fileprivate func setupLogOutButton() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "gear").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleSignOutButton))
+    }
+    
+    @objc fileprivate func handleSignOutButton() {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
+            do {
+                try Auth.auth().signOut()
+                
+                let loginController = LoginController()
+                let navigationController = UINavigationController(rootViewController: loginController)
+                self.present(navigationController, animated: true, completion: nil)
+                
+            } catch let signOutError {
+                print("Failed to sign out: ", signOutError.localizedDescription)
+            }
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

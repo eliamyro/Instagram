@@ -9,8 +9,8 @@
 import UIKit
 import Firebase
 
-class ViewController: UIViewController {
-
+class SignUpController: UIViewController {
+    private let notificationKey = "com.eliamyro.instagram.notificationkey"
     private var db: Firestore!
     
     let plusPhotoButton: UIButton = {
@@ -70,6 +70,18 @@ class ViewController: UIViewController {
         return button
     }()
     
+    let alreadyHaveAccountButton: UIButton = {
+        let button = UIButton(type: .system)
+        let attributedTitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        
+        attributedTitle.append(NSAttributedString(string: "Login", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)]))
+        
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        
+        button.addTarget(self, action: #selector(handleLoginShow), for: .touchUpInside)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,12 +89,14 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        view.addSubview(plusPhotoButton)
-        plusPhotoButton.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 40, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 140, height: 140)
+        [plusPhotoButton, alreadyHaveAccountButton].forEach { view.addSubview($0) }
+       
+        plusPhotoButton.anchor(top: view.topAnchor, leading: nil, bottom: nil, trailing: nil, padding: .init(top: 40, left: 0, bottom: 0, right: 0), size: .init(width: 140, height: 140))
         plusPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         setupInputFields()
         
+        alreadyHaveAccountButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, size: .init(width: 0, height: 30))
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -104,7 +118,7 @@ class ViewController: UIViewController {
         stackView.spacing = 10
         
         view.addSubview(stackView)
-        stackView.anchor(top: plusPhotoButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 20, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 200)
+        stackView.anchor(top: plusPhotoButton.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 20, left: 40, bottom: 0, right: 40), size: .init(width: 0, height: 200))
     }
     
     @objc private func handleSignUpButtonPressed() {
@@ -155,10 +169,17 @@ class ViewController: UIViewController {
                         }
                         
                         print("User saved succesfully to Firebase database.")
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: self.notificationKey), object: self)
+                        self.dismiss(animated: true, completion: nil)
                     })
                 })
             })
         }
+    }
+    
+    @objc private func handleLoginShow() {
+        _ = navigationController?.popViewController(animated: true)
     }
     
     @objc private func handleTextInputChange() {
@@ -184,7 +205,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
