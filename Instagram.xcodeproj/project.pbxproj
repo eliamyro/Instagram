@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		812414E4213DBA53004C98D0 /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812414E3213DBA53004C98D0 /* PhotoSelectorController.swift */; };
 		812E3F662138329100738AE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E3F652138329100738AE0 /* AppDelegate.swift */; };
 		812E3F682138329100738AE0 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812E3F672138329100738AE0 /* SignUpController.swift */; };
 		812E3F6D2138329200738AE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 812E3F6C2138329200738AE0 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		0A5182D63ACCCC91578B3348 /* Pods-Instagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram.release.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram/Pods-Instagram.release.xcconfig"; sourceTree = "<group>"; };
 		1BAFDE6B698A0DDCE5FCB170 /* Pods-Instagram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Instagram.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Instagram/Pods-Instagram.debug.xcconfig"; sourceTree = "<group>"; };
+		812414E3213DBA53004C98D0 /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		812E3F622138329100738AE0 /* Instagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Instagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		812E3F652138329100738AE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		812E3F672138329100738AE0 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -61,6 +63,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		812414E2213DBA37004C98D0 /* AddPhoto */ = {
+			isa = PBXGroup;
+			children = (
+				812414E3213DBA53004C98D0 /* PhotoSelectorController.swift */,
+			);
+			path = AddPhoto;
+			sourceTree = "<group>";
+		};
 		812E3F592138329100738AE0 = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +92,7 @@
 		812E3F642138329100738AE0 /* Instagram */ = {
 			isa = PBXGroup;
 			children = (
+				812414E2213DBA37004C98D0 /* AddPhoto */,
 				81335E29213959B000635D3F /* Login */,
 				81DC56712138460B0048A083 /* UserProfile */,
 				81945B8F2138378B00DC6206 /* Utils */,
@@ -263,6 +274,7 @@
 				812E3F682138329100738AE0 /* SignUpController.swift in Sources */,
 				81945B912138379900DC6206 /* Extensions.swift in Sources */,
 				81DC5679213847E10048A083 /* MainTabController.swift in Sources */,
+				812414E4213DBA53004C98D0 /* PhotoSelectorController.swift in Sources */,
 				81DC56772138469B0048A083 /* User.swift in Sources */,
 				81DC5675213846660048A083 /* UserProfileHeader.swift in Sources */,
 				81335E282139575800635D3F /* LoginController.swift in Sources */,

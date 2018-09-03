@@ -15,6 +15,8 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        delegate = self
+        
         NotificationCenter.default.addObserver(self, selector: #selector(setupViewControllers), name: NSNotification.Name(rawValue: notificationKey), object: nil)
         
         if Auth.auth().currentUser == nil {
@@ -65,18 +67,20 @@ class MainTabBarController: UITabBarController {
         
         return navController
     }
+}
+
+extension MainTabBarController: UITabBarControllerDelegate {
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewControllers?.index(of: viewController) == 2 {
+            
+            let layout = UICollectionViewFlowLayout()
+            let photoSelectorController = PhotoSelectorController(collectionViewLayout: layout)
+            let photoSelectorNavController = UINavigationController(rootViewController: photoSelectorController)
+            
+            present(photoSelectorNavController, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
 }
