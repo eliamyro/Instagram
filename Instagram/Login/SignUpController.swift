@@ -11,7 +11,6 @@ import Firebase
 
 class SignUpController: UIViewController {
     private let notificationKey = "com.eliamyro.instagram.notificationkey"
-    private var db: Firestore!
     
     let plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -72,9 +71,9 @@ class SignUpController: UIViewController {
     
     let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
-        let attributedTitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.lightGray])
+        let attributedTitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         
-        attributedTitle.append(NSAttributedString(string: "Login", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedStringKey.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)]))
+        attributedTitle.append(NSAttributedString(string: "Login", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.rgb(red: 17, green: 154, blue: 237)]))
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         
@@ -84,8 +83,6 @@ class SignUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        db = Firestore.firestore()
         
         view.backgroundColor = .white
         
@@ -112,6 +109,10 @@ class SignUpController: UIViewController {
     }
     
     fileprivate func setupInputFields() {
+        emailTextField.delegate = self
+        usernameTextField.delegate = self
+        passwordTextField.delegate = self
+        
         let stackView = UIStackView(arrangedSubviews: [emailTextField, usernameTextField, passwordTextField, signUpButton])
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -121,7 +122,9 @@ class SignUpController: UIViewController {
         stackView.anchor(top: plusPhotoButton.bottomAnchor, leading: view.leadingAnchor, bottom: nil, trailing: view.trailingAnchor, padding: .init(top: 20, left: 40, bottom: 0, right: 40), size: .init(width: 0, height: 200))
     }
     
-    @objc private func handleSignUpButtonPressed() {
+    // MARK: - Actions
+    
+    @objc fileprivate func handleSignUpButtonPressed() {
         print("Sign up button pressed!")
         
         guard let email = emailTextField.text, email.count > 0 else { return }
@@ -138,7 +141,7 @@ class SignUpController: UIViewController {
             
             guard let uid = result?.user.uid else { return }
             guard let image = self.plusPhotoButton.imageView?.image else { return }
-            guard let uploadData = UIImageJPEGRepresentation(image, 0.3) else { return }
+            guard let uploadData = image.jpegData(compressionQuality: 0.3) else { return }
             
             let filename = NSUUID().uuidString
             
@@ -161,17 +164,18 @@ class SignUpController: UIViewController {
                     guard let profileImageUrl = downloadUrl?.absoluteString else { return }
                     
                     let userDictionary = ["username": username, "profileImageUrl": profileImageUrl]
-                    
-                    self.db.collection("users").document(uid).setData(userDictionary, completion: { (error) in
+                    let values = [uid: userDictionary]
+                    Database.database().reference().child("users").updateChildValues(values, withCompletionBlock: { (error, reference) in
                         if let error = error {
                             print("Failed to save user to Firebase: ", error.localizedDescription)
                             return
                         }
                         
                         print("User saved succesfully to Firebase database.")
-                        
+
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: self.notificationKey), object: self)
                         self.dismiss(animated: true, completion: nil)
+                        
                     })
                 })
             })
@@ -203,25 +207,45 @@ class SignUpController: UIViewController {
         
         present(imagePickerController, animated: true, completion: nil)
     }
+
 }
 
-extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+// Local variable inserted by Swift 4.2 migrator.
+        let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
+
+        if let originalImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage {
             plusPhotoButton.setImage(originalImage.withRenderingMode(.alwaysOriginal), for: .normal)
-        } else if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+        } else if let editedImage = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.editedImage)] as? UIImage {
             plusPhotoButton.setImage(editedImage.withRenderingMode(.alwaysOriginal), for: .normal)
         }
-        
+
         plusPhotoButton.layer.cornerRadius = plusPhotoButton.frame.width / 2
         plusPhotoButton.layer.masksToBounds = true
         plusPhotoButton.layer.borderColor = UIColor.black.cgColor
         plusPhotoButton.layer.borderWidth = 3
-        
+
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.handleSignUpButtonPressed()
+        textField.resignFirstResponder()
+        return true
     }
 
 
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+	return input.rawValue
+}
