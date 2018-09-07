@@ -12,13 +12,14 @@ class UserProfileHeader: UICollectionReusableView {
     
     var user: User? {
         didSet {
-            setupProfileImage()
+            guard let url = user?.profileImageUrl else { return }
+            profileImageView.loadImage(urlString: url)
             usernameLabel.text = user?.username
         }
     }
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
+    let profileImageView: CustomImageView = {
+        let imageView = CustomImageView()
         imageView.layer.cornerRadius = 80/2
         imageView.layer.masksToBounds = true
         
@@ -139,26 +140,6 @@ class UserProfileHeader: UICollectionReusableView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-    fileprivate func setupProfileImage() {
-        guard let profileImageUrl = user?.profileImageUrl else { return }
-        guard let url = URL(string: profileImageUrl) else { return }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            if let error = error {
-                print("Failed to fetch profile image: ", error)
-                return
-            }
-            
-            guard let data = data else { return }
-            let profileImage = UIImage(data: data)
-            
-            DispatchQueue.main.async {
-                self.profileImageView.image = profileImage
-            }
-            }.resume()
     }
     
     fileprivate func setupBottomToolbar() {

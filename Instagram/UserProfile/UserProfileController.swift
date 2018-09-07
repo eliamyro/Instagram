@@ -25,7 +25,7 @@ class UserProfileController: UICollectionViewController {
         
         setupLogOutButton()
         fetchUser()
-        fetchPosts()
+        fetchOrderedPosts()
     }
     
     fileprivate func fetchUser() {
@@ -38,6 +38,19 @@ class UserProfileController: UICollectionViewController {
             self.collectionView?.reloadData()
         }) { (error) in
             print("Failed to fetch user:", error.localizedDescription)
+        }
+    }
+    
+    fileprivate func fetchOrderedPosts() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let reference = Database.database().reference().child("posts").child(uid)
+        reference.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            let post = Post(dictionary: dictionary)
+            self.posts.append(post)
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Failed to fetch posts: ", error.localizedDescription)
         }
     }
     
