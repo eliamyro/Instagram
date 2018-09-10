@@ -100,7 +100,7 @@ class SharePhotoController: UIViewController {
             }
             
             print("Post saved successfully to database")
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }

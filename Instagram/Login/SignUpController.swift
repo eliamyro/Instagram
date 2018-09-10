@@ -93,7 +93,7 @@ class SignUpController: UIViewController {
         
         setupInputFields()
         
-        alreadyHaveAccountButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor, size: .init(width: 0, height: 30))
+        alreadyHaveAccountButton.anchor(top: nil, leading: view.leadingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, trailing: view.trailingAnchor, size: .init(width: 0, height: 30))
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {

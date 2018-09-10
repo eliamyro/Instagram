@@ -82,6 +82,7 @@
 		811824CB214283A7000FEA8D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				81DC56762138469B0048A083 /* User.swift */,
 				811824CC214283B0000FEA8D /* Post.swift */,
 			);
 			path = Models;
@@ -125,7 +126,6 @@
 				81335E29213959B000635D3F /* Login */,
 				81DC56712138460B0048A083 /* UserProfile */,
 				81945B8F2138378B00DC6206 /* Utils */,
-				81DC56762138469B0048A083 /* User.swift */,
 				81DC5678213847E10048A083 /* MainTabController.swift */,
 				812E3F652138329100738AE0 /* AppDelegate.swift */,
 				812E3F6C2138329200738AE0 /* Assets.xcassets */,

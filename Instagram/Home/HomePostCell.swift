@@ -14,12 +14,19 @@ class HomePostCell: UICollectionViewCell {
         didSet {
             guard let url = post?.imageUrl else { return }
             photoImageView.loadImage(urlString: url)
+            
+            guard let username = post?.user.username else { return }
+            usernameLabel.text = username
+            
+            guard let profileImageUrl = post?.user.profileImageUrl else { return }
+            userProfileImageView.loadImage(urlString: profileImageUrl)
+            
+            setupAttributedCaption()
         }
     }
     
     let userProfileImageView: CustomImageView = {
         let imageView = CustomImageView()
-        imageView.backgroundColor = .red
         
         return imageView
     }()
@@ -78,11 +85,6 @@ class HomePostCell: UICollectionViewCell {
     
     let captionLabel: UILabel = {
         let label = UILabel()
-        let attributedText = NSMutableAttributedString(string: "Username ", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.black])
-        attributedText.append(NSAttributedString(string: "Some caption text that will perhaps wrap onto the next line", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
-        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 4)]))
-        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
-        label.attributedText = attributedText
         label.numberOfLines = 0
         
         return label
@@ -98,6 +100,7 @@ class HomePostCell: UICollectionViewCell {
         
         userProfileImageView.anchor(top: topAnchor, leading: leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: 8, left: 8, bottom: 0, right: 0), size: .init(width: 40, height: 40))
         userProfileImageView.layer.cornerRadius = 40/2
+        userProfileImageView.clipsToBounds = true
         
         usernameLabel.anchor(top: topAnchor, leading: userProfileImageView.trailingAnchor, bottom: photoImageView.topAnchor, trailing: optionsButton.leadingAnchor, padding: .init(top: 0, left: 8, bottom: 0, right: 0))
         
@@ -126,5 +129,16 @@ class HomePostCell: UICollectionViewCell {
         bookmarkButton.anchor(top: photoImageView.bottomAnchor, leading: nil, bottom: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 0, bottom: 0, right: 0), size: .init(width: 40, height: 50))
         
         captionLabel.anchor(top: stackView.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 4, bottom: 0, right: 4))
+    }
+    
+    fileprivate func setupAttributedCaption() {
+        guard let username = post?.user.username else { return }
+        guard let caption = post?.caption else { return }
+        
+        let attributedText = NSMutableAttributedString(string: username, attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.black])
+        attributedText.append(NSAttributedString(string: " \(caption)", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: "\n\n", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 4)]))
+        attributedText.append(NSAttributedString(string: "1 week ago", attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)]))
+        captionLabel.attributedText = attributedText
     }
 }

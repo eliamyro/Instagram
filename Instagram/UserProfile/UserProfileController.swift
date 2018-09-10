@@ -46,8 +46,10 @@ class UserProfileController: UICollectionViewController {
         let reference = Database.database().reference().child("posts").child(uid)
         reference.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: Any] else { return }
-            let post = Post(dictionary: dictionary)
-            self.posts.append(post)
+            guard let user = self.user else { return }
+            
+            let post = Post(user: user, dictionary: dictionary)
+            self.posts.insert(post, at: 0)
             self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch posts: ", error.localizedDescription)
