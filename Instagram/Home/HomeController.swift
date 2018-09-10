@@ -57,11 +57,17 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_ID, for: indexPath) as! HomePostCell
         cell.post = posts[indexPath.item]
+
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 200)
+        
+        var height: CGFloat = 56    // user profile image view
+        height += view.frame.width  // photoImageView
+        height += 110               // bottom actions view
+        
+        return CGSize(width: view.frame.width, height: height)
     }
 }
 
