@@ -30,11 +30,13 @@ class HomeController: UICollectionViewController {
     
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-    Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-        guard let userDictionary = snapshot.value as? [String: Any] else { return }
-        let user = User(dictionary: userDictionary)
-        
-        let reference = Database.database().reference().child("posts").child(uid)
+        Database.fetchUserWithUID(uid: uid) { (user) in
+            self.fetchPostsWithUser(user: user)
+        }
+    }
+    
+    fileprivate func fetchPostsWithUser(user: User) {
+        let reference = Database.database().reference().child("posts").child(user.uid)
         reference.observeSingleEvent(of: .value, with: { (snapshot) in
             
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
@@ -45,11 +47,8 @@ class HomeController: UICollectionViewController {
             })
             
             self.collectionView.reloadData()
-            }) { (error) in
-                print("Failed to fetch posts: ", error.localizedDescription)
-            }
         }) { (error) in
-            print("Failed to fetch user: ", error.localizedDescription)
+            print("Failed to fetch posts: ", error.localizedDescription)
         }
     }
 }
