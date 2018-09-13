@@ -16,7 +16,7 @@ class UserProfilePostsCell: UICollectionViewCell {
         }
     }
     
-    let photoImageView: CustomImageView = {
+    lazy var photoImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true

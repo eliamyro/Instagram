@@ -15,28 +15,29 @@ class UserSearchController: UICollectionViewController {
     var users = [User]()
     var filteredUsers = [User]()
     
-    lazy var userSearchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Enter username"
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
-        
-        searchBar.delegate = self
-        return searchBar
+    lazy var searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Enter username"
+        searchController.searchBar.barStyle = .blackTranslucent
+//        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = UIColor.rgb(red: 230, green: 230, blue: 230)
+        searchController.searchBar.delegate = self
+    
+        return searchController
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.backgroundColor = .white
-        
-        let navBar = navigationController?.navigationBar
-        
-        navBar?.addSubview(userSearchBar)
-        userSearchBar.anchor(top: navBar?.topAnchor, leading: navBar?.leadingAnchor, bottom: navBar?.bottomAnchor, trailing: navBar?.trailingAnchor, padding: .init(top: 0, left: 8, bottom: 0, right: 8))
+    
+        navigationItem.titleView = searchController.searchBar
         
         collectionView.register(UserSearchCell.self, forCellWithReuseIdentifier: CELL_ID)
         
         collectionView.alwaysBounceVertical = true
+        collectionView.keyboardDismissMode = .onDrag
         
         fetchUsers()
     }
@@ -45,6 +46,7 @@ class UserSearchController: UICollectionViewController {
         Database.database().reference().child("users").observe(.value, with: { (snapshot) in
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             dictionaries.forEach({ (key, value) in
+                if key == Auth.auth().currentUser?.uid { return }
                 guard let userDictionary  = value as? [String: Any] else { return }
                 let user = User(uid: key, dictionary: userDictionary)
                 self.users.append(user)
@@ -76,8 +78,17 @@ extension UserSearchController: UICollectionViewDelegateFlowLayout, UISearchBarD
         return cell
     }
     
-    // MARK: - CollectionViewDelegateFlowLayour methods
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(filteredUsers)
+        let user = filteredUsers[indexPath.item]
+       print(user.username)
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        print(user.uid)
+        userProfileController.userId = user.uid
+        navigationController?.pushViewController(userProfileController, animated: true)
+    }
     
+    // MARK: - CollectionViewDelegateFlowLayour methods
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 66)
     }

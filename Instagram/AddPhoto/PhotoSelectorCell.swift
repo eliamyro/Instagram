@@ -10,7 +10,7 @@ import UIKit
 
 class PhotoSelectorCell: UICollectionViewCell {
     
-    var photoImageView: UIImageView = {
+    lazy var photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .yellow
         imageView.contentMode = .scaleAspectFill

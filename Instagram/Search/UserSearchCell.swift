@@ -19,7 +19,7 @@ class UserSearchCell: UICollectionViewCell {
         }
     }
     
-    let profileImageView: CustomImageView = {
+    lazy var profileImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.backgroundColor = .red
         imageView.contentMode = .scaleAspectFill
@@ -28,7 +28,7 @@ class UserSearchCell: UICollectionViewCell {
         return imageView
     }()
     
-    let usernameLabel: UILabel = {
+    lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "Username"
         label.font = UIFont.boldSystemFont(ofSize: 14)

@@ -12,7 +12,7 @@ import Firebase
 class LoginController: UIViewController {
     private let notificationKey = "com.eliamyro.instagram.notificationkey"
     
-    let loginContainerView: UIView = {
+    lazy var loginContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.rgb(red: 0, green: 120, blue: 175)
         
@@ -29,7 +29,7 @@ class LoginController: UIViewController {
         return view
     }()
     
-    let emailTextField: UITextField = {
+    lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -42,7 +42,7 @@ class LoginController: UIViewController {
         return textField
     }()
     
-    let loginButton: UIButton = {
+    lazy var loginButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Login", for: .normal)
         button.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
@@ -55,7 +55,7 @@ class LoginController: UIViewController {
         return button
     }()
     
-    let passwordTextField: UITextField = {
+    lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -67,7 +67,7 @@ class LoginController: UIViewController {
         return textField
     }()
     
-    let dontHaveAccountButton: UIButton = {
+    lazy var dontHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         

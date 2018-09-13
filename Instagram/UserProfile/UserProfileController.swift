@@ -15,6 +15,8 @@ class UserProfileController: UICollectionViewController {
     private let CELL_ID = "cellId"
     private var posts = [Post]()
     
+    var userId: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,12 +26,14 @@ class UserProfileController: UICollectionViewController {
         collectionView?.register(UserProfilePostsCell.self, forCellWithReuseIdentifier: CELL_ID)
         
         setupLogOutButton()
+        
         fetchUser()
         fetchOrderedPosts()
     }
     
     fileprivate func fetchUser() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
+        
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.user = user
             self.navigationItem.title = self.user?.username
@@ -38,7 +42,7 @@ class UserProfileController: UICollectionViewController {
     }
     
     fileprivate func fetchOrderedPosts() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let uid = userId ?? Auth.auth().currentUser?.uid ?? ""
         let reference = Database.database().reference().child("posts").child(uid)
         reference.queryOrdered(byChild: "creationDate").observe(.childAdded, with: { (snapshot) in
             guard let dictionary = snapshot.value as? [String: Any] else { return }

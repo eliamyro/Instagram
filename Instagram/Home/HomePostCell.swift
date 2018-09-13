@@ -25,13 +25,13 @@ class HomePostCell: UICollectionViewCell {
         }
     }
     
-    let userProfileImageView: CustomImageView = {
+    lazy var userProfileImageView: CustomImageView = {
         let imageView = CustomImageView()
         
         return imageView
     }()
     
-    let usernameLabel: UILabel = {
+    lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.text = "Username"
         label.font = UIFont.boldSystemFont(ofSize: 14)
@@ -39,7 +39,7 @@ class HomePostCell: UICollectionViewCell {
         return label
     }()
     
-    let optionsButton: UIButton = {
+    lazy var optionsButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("•••", for: .normal)
         button.setTitleColor(.black, for: .normal)
@@ -47,7 +47,7 @@ class HomePostCell: UICollectionViewCell {
         return button
     }()
     
-    let photoImageView: CustomImageView = {
+    lazy var photoImageView: CustomImageView = {
         let imageView = CustomImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -55,7 +55,7 @@ class HomePostCell: UICollectionViewCell {
         return imageView
     }()
     
-    let likeButton: UIButton = {
+    lazy var likeButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal), for: .normal)
         
@@ -69,21 +69,21 @@ class HomePostCell: UICollectionViewCell {
         return button
     }()
     
-    let sendMessageButton: UIButton = {
+    lazy var sendMessageButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "send2").withRenderingMode(.alwaysOriginal), for: .normal)
         
         return button
     }()
     
-    let bookmarkButton: UIButton = {
+    lazy var bookmarkButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "ribbon").withRenderingMode(.alwaysOriginal), for: .normal)
         
         return button
     }()
     
-    let captionLabel: UILabel = {
+    lazy var captionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         

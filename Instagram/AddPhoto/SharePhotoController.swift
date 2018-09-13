@@ -17,7 +17,7 @@ class SharePhotoController: UIViewController {
         }
     }
     
-    let photoImage: UIImageView = {
+    lazy var photoImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -25,7 +25,7 @@ class SharePhotoController: UIViewController {
         return imageView
     }()
     
-    let captionTextView: UITextView = {
+    lazy var captionTextView: UITextView = {
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 14)
        

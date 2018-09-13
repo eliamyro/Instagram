@@ -12,7 +12,7 @@ import Firebase
 class SignUpController: UIViewController {
     private let notificationKey = "com.eliamyro.instagram.notificationkey"
     
-    let plusPhotoButton: UIButton = {
+    lazy var plusPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
         
@@ -20,7 +20,7 @@ class SignUpController: UIViewController {
         return button
     }()
     
-    let emailTextField: UITextField = {
+    lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -33,7 +33,7 @@ class SignUpController: UIViewController {
         return textField
     }()
     
-    let usernameTextField: UITextField = {
+    lazy var usernameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Username"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -44,7 +44,7 @@ class SignUpController: UIViewController {
         return textField
     }()
     
-    let passwordTextField: UITextField = {
+    lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Password"
         textField.backgroundColor = UIColor(white: 0, alpha: 0.03)
@@ -56,7 +56,7 @@ class SignUpController: UIViewController {
         return textField
     }()
     
-    let signUpButton: UIButton = {
+    lazy var signUpButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.backgroundColor = UIColor.rgb(red: 149, green: 204, blue: 244)
@@ -69,7 +69,7 @@ class SignUpController: UIViewController {
         return button
     }()
     
-    let alreadyHaveAccountButton: UIButton = {
+    lazy var alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         let attributedTitle = NSMutableAttributedString(string: "Already have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         
