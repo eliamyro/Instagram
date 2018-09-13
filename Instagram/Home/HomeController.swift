@@ -30,8 +30,28 @@ class HomeController: UICollectionViewController {
     
     fileprivate func fetchPosts() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.fetchPostsWithUser(user: user)
+        }
+        
+        fetchFollowingUserIds()
+    }
+    
+    fileprivate func fetchFollowingUserIds() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
+            
+            userIdsDictionary.forEach({ (key, value) in
+                Database.fetchUserWithUID(uid: key) { (user) in
+                    self.fetchPostsWithUser(user: user)
+                }
+            })
+            
+        }) { (error) in
+            print("Failed to fetch following users: ", error.localizedDescription)
         }
     }
     
@@ -44,6 +64,10 @@ class HomeController: UICollectionViewController {
                 guard let dictionary = value as? [String: Any] else { return }
                 let post = Post(user: user, dictionary: dictionary)
                 self.posts.append(post)
+            })
+            
+            self.posts.sort(by: { (post1, post2) -> Bool in
+               return post1.creationDate.compare(post2.creationDate) == .orderedDescending
             })
             
             self.collectionView.reloadData()
