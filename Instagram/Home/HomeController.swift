@@ -20,6 +20,12 @@ class HomeController: UICollectionViewController {
         
         collectionView.register(HomePostCell.self, forCellWithReuseIdentifier: CELL_ID)
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: SharePhotoController.updateNotificationName, object: nil)
+        
         setupNavigationItems()
         fetchPosts()
     }
@@ -70,10 +76,17 @@ class HomeController: UICollectionViewController {
                return post1.creationDate.compare(post2.creationDate) == .orderedDescending
             })
             
+            self.collectionView.refreshControl?.endRefreshing()
+            
             self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch posts: ", error.localizedDescription)
         }
+    }
+    
+    @objc fileprivate func handleRefresh() {
+        posts.removeAll()
+        fetchPosts()
     }
 }
 
@@ -85,8 +98,10 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CELL_ID, for: indexPath) as! HomePostCell
-        cell.post = posts[indexPath.item]
-
+        if indexPath.item < posts.count {
+            cell.post = posts[indexPath.item]
+        }
+        
         return cell
     }
     
