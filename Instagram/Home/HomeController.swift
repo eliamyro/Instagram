@@ -32,6 +32,9 @@ class HomeController: UICollectionViewController {
     
     fileprivate func setupNavigationItems() {
         navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "logo2"))
+        
+        let cameraBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "camera3"), style: .plain, target: self, action: #selector(handleCameraButton))
+        navigationItem.leftBarButtonItem = cameraBarButton
     }
     
     fileprivate func fetchPosts() {
@@ -87,6 +90,11 @@ class HomeController: UICollectionViewController {
     @objc fileprivate func handleRefresh() {
         posts.removeAll()
         fetchPosts()
+    }
+    
+    @objc fileprivate func handleCameraButton() {
+        let cameraController = CameraController()
+        present(cameraController, animated: true, completion: nil)
     }
 }
 
