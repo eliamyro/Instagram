@@ -11,6 +11,8 @@ import AVFoundation
 
 class CameraController: UIViewController {
     
+     let output = AVCapturePhotoOutput()
+    
     lazy var capturePhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "capture_photo"), for: .normal)
@@ -61,7 +63,7 @@ class CameraController: UIViewController {
         
         
         // Setup output
-        let output = AVCapturePhotoOutput()
+       
         if captureSession.canAddOutput(output) {
             captureSession.addOutput(output)
         }
@@ -73,11 +75,36 @@ class CameraController: UIViewController {
         captureSession.startRunning()
     }
     
+    
+    // MARK: - Action methods
+    
     @objc fileprivate func handleCapturePhotoButton() {
         print("Capturing photo...")
+        let settings = AVCapturePhotoSettings()
+        guard let previewFormatType = settings.availablePreviewPhotoPixelFormatTypes.first else { return }
+        settings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewFormatType]
+        output.capturePhoto(with: settings, delegate: self)
     }
     
     @objc fileprivate func handleDismissButton() {
         self.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension CameraController: AVCapturePhotoCaptureDelegate {
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
+        if let error = error {
+            print("Failed to process photo: ", error.localizedDescription)
+            return
+        }
+        
+        let imageData = photo.fileDataRepresentation()
+        let previewImage = UIImage(data: imageData!)
+        let previewImageView = UIImageView(image: previewImage)
+        view.addSubview(previewImageView)
+        previewImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        print("Finish processing photo")
     }
 }
