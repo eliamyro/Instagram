@@ -29,6 +29,10 @@ class CameraController: UIViewController {
         return button
     }()
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,9 +106,17 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         
         let imageData = photo.fileDataRepresentation()
         let previewImage = UIImage(data: imageData!)
-        let previewImageView = UIImageView(image: previewImage)
-        view.addSubview(previewImageView)
-        previewImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        print("Finish processing photo")
+       
+        let previewContainerView = PreviewPhotoContainerView()
+        previewContainerView.previewImage = previewImage
+        
+        view.addSubview(previewContainerView)
+        previewContainerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+        
+        
+//        let previewImageView = UIImageView(image: previewImage)
+//        view.addSubview(previewImageView)
+//        previewImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
+//        print("Finish processing photo")
     }
 }
