@@ -11,7 +11,9 @@ import AVFoundation
 
 class CameraController: UIViewController {
     
-     let output = AVCapturePhotoOutput()
+    let output = AVCapturePhotoOutput()
+    let customAnimationPresentor = CustomAnimationPresentor()
+    let customAnimationDismiss = CustomAnimationDismiss()
     
     lazy var capturePhotoButton: UIButton = {
         let button = UIButton(type: .system)
@@ -36,6 +38,7 @@ class CameraController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        transitioningDelegate = self
         setupCaptureSession()
         setupHUD()
     }
@@ -112,11 +115,16 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         
         view.addSubview(previewContainerView)
         previewContainerView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-        
-        
-//        let previewImageView = UIImageView(image: previewImage)
-//        view.addSubview(previewImageView)
-//        previewImageView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: view.bottomAnchor, trailing: view.trailingAnchor)
-//        print("Finish processing photo")
+    }
+}
+
+extension CameraController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return customAnimationPresentor
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return customAnimationDismiss
     }
 }
