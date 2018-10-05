@@ -109,6 +109,7 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         if indexPath.item < posts.count {
             cell.post = posts[indexPath.item]
         }
+        cell.delegate = self
         
         return cell
     }
@@ -120,6 +121,13 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
         height += 110               // bottom actions view
         
         return CGSize(width: view.frame.width, height: height)
+    }
+}
+
+extension HomeController: HomePostDelegate {
+    func didTapComment(post: Post) {
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(commentsController, animated: true)
     }
 }
 
