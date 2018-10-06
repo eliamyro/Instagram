@@ -11,13 +11,22 @@ import Firebase
 
 class CommentsController: UICollectionViewController {
     
+    fileprivate let cellId = "cellId"
+    
     var post: Post?
+    var comments = [Comment]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Comments"
         collectionView.backgroundColor = .red
+        
+        collectionView.register(CommentsCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        
+        fetchComments()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -85,5 +94,37 @@ class CommentsController: UICollectionViewController {
             
             print("Successfully saved comment!")
         }
+    }
+    
+    fileprivate func fetchComments() {
+        guard let postId = post?.id else { return }
+        Database.database().reference(withPath: "comments").child(postId).observe(.childAdded, with: { (snapshot) in
+            guard let dictionary = snapshot.value as? [String: Any] else { return }
+            self.comments.append(Comment(dictionary: dictionary))
+            
+            self.collectionView.reloadData()
+        }) { (error) in
+            print("Failed to fetch posts: ", error.localizedDescription)
+        }
+    }
+}
+
+extension CommentsController {
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return comments.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CommentsCell
+        cell.comment = comments[indexPath.item]
+        return cell
+    }
+}
+
+extension CommentsController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 50)
     }
 }

@@ -23,9 +23,11 @@
 		817815FD21445E530017DAB3 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817815FC21445E530017DAB3 /* HomePostCell.swift */; };
 		817C0E512142D43C001CD379 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817C0E502142D43C001CD379 /* CustomImageView.swift */; };
 		817CB9EC213EB8B600315874 /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817CB9EB213EB8B600315874 /* PhotoSelectorCell.swift */; };
-		81945B8E213836DC00DC6206 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 81945B8D213836DC00DC6206 /* GoogleService-Info.plist */; };
 		81945B912138379900DC6206 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81945B902138379900DC6206 /* Extensions.swift */; };
 		81ACF56E215ABC4E00C227DC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ACF56D215ABC4E00C227DC /* CameraController.swift */; };
+		81D3EFBB2168C3CC009B8C45 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D3EFBA2168C3CC009B8C45 /* CommentsCell.swift */; };
+		81D3EFBF2168C557009B8C45 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 81D3EFBE2168C557009B8C45 /* GoogleService-Info.plist */; };
+		81D3EFC12168C997009B8C45 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D3EFC02168C997009B8C45 /* Comment.swift */; };
 		81DC5673213846370048A083 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC5672213846370048A083 /* UserProfileController.swift */; };
 		81DC5675213846660048A083 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC5674213846660048A083 /* UserProfileHeader.swift */; };
 		81DC56772138469B0048A083 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DC56762138469B0048A083 /* User.swift */; };
@@ -59,9 +61,11 @@
 		817815FC21445E530017DAB3 /* HomePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
 		817C0E502142D43C001CD379 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		817CB9EB213EB8B600315874 /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
-		81945B8D213836DC00DC6206 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81945B902138379900DC6206 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		81ACF56D215ABC4E00C227DC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		81D3EFBA2168C3CC009B8C45 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
+		81D3EFBE2168C557009B8C45 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		81D3EFC02168C997009B8C45 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		81DC5672213846370048A083 /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		81DC5674213846660048A083 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
 		81DC56762138469B0048A083 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 			children = (
 				81DC56762138469B0048A083 /* User.swift */,
 				811824CC214283B0000FEA8D /* Post.swift */,
+				81D3EFC02168C997009B8C45 /* Comment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -149,7 +154,7 @@
 				812E3F6C2138329200738AE0 /* Assets.xcassets */,
 				812E3F6E2138329200738AE0 /* LaunchScreen.storyboard */,
 				812E3F712138329200738AE0 /* Info.plist */,
-				81945B8D213836DC00DC6206 /* GoogleService-Info.plist */,
+				81D3EFBE2168C557009B8C45 /* GoogleService-Info.plist */,
 			);
 			path = Instagram;
 			sourceTree = "<group>";
@@ -169,6 +174,7 @@
 				817815FA21444E170017DAB3 /* HomeController.swift */,
 				817815FC21445E530017DAB3 /* HomePostCell.swift */,
 				81EB51A4216751DD000E9231 /* CommentsController.swift */,
+				81D3EFBA2168C3CC009B8C45 /* CommentsCell.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -284,7 +290,7 @@
 			files = (
 				812E3F702138329200738AE0 /* LaunchScreen.storyboard in Resources */,
 				812E3F6D2138329200738AE0 /* Assets.xcassets in Resources */,
-				81945B8E213836DC00DC6206 /* GoogleService-Info.plist in Resources */,
+				81D3EFBF2168C557009B8C45 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +361,7 @@
 				81DC5675213846660048A083 /* UserProfileHeader.swift in Sources */,
 				810F68282140464000332A4B /* SharePhotoController.swift in Sources */,
 				81EB51A3216744C4000E9231 /* CustomAnimationDismiss.swift in Sources */,
+				81D3EFBB2168C3CC009B8C45 /* CommentsCell.swift in Sources */,
 				81FD24F321400E6800CF3B35 /* PhotoSelectorHeader.swift in Sources */,
 				81335E282139575800635D3F /* LoginController.swift in Sources */,
 				81DC5673213846370048A083 /* UserProfileController.swift in Sources */,
@@ -364,6 +371,7 @@
 				81ACF56E215ABC4E00C227DC /* CameraController.swift in Sources */,
 				81EB51A5216751DD000E9231 /* CommentsController.swift in Sources */,
 				811824CF21428596000FEA8D /* UserProfilePostsCell.swift in Sources */,
+				81D3EFC12168C997009B8C45 /* Comment.swift in Sources */,
 				817CB9EC213EB8B600315874 /* PhotoSelectorCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
