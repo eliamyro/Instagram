@@ -10,11 +10,13 @@ import Foundation
 
 struct Comment {
     
+    let user: User
     let text: String
     let creationDate: Date
     let uid: String
     
-    init(dictionary: [String: Any]) {
+    init(user: User, dictionary: [String: Any]) {
+        self.user = user
         text = dictionary["text"] as? String ?? ""
         let secondFrom1970 = dictionary["creationDate"] as? Double ?? 0
         creationDate = Date(timeIntervalSince1970: secondFrom1970)
