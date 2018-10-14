@@ -67,22 +67,31 @@ class HomeController: UICollectionViewController {
     fileprivate func fetchPostsWithUser(user: User) {
         let reference = Database.database().reference().child("posts").child(user.uid)
         reference.observeSingleEvent(of: .value, with: { (snapshot) in
+            self.collectionView.refreshControl?.endRefreshing()
             
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
             dictionaries.forEach({ (key, value) in
                 guard let dictionary = value as? [String: Any] else { return }
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-                self.posts.append(post)
+                
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                Database.database().reference(withPath: "likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.isLiked = true
+                    } else {
+                        post.isLiked = false
+                    }
+                    
+                    self.posts.append(post)
+                    self.posts.sort(by: { (post1, post2) -> Bool in
+                        return post1.creationDate.compare(post2.creationDate) == .orderedDescending
+                    })
+                    self.collectionView.reloadData()
+                }, withCancel: { (error) in
+                    print("Failed to fetch likes: ", error.localizedDescription)
+                })
             })
-            
-            self.posts.sort(by: { (post1, post2) -> Bool in
-               return post1.creationDate.compare(post2.creationDate) == .orderedDescending
-            })
-            
-            self.collectionView.refreshControl?.endRefreshing()
-            
-            self.collectionView.reloadData()
         }) { (error) in
             print("Failed to fetch posts: ", error.localizedDescription)
         }
@@ -126,10 +135,31 @@ extension HomeController: UICollectionViewDelegateFlowLayout {
 }
 
 extension HomeController: HomePostDelegate {
+    
     func didTapComment(post: Post) {
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post
         navigationController?.pushViewController(commentsController, animated: true)
+    }
+    
+    func didTapLike(postCell: HomePostCell) {
+        guard let indexPath = collectionView.indexPath(for: postCell) else { return }
+        var post = self.posts[indexPath.item]
+        
+        guard let postId = post.id else { return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let values = [uid: post.isLiked == true ? nil : 1]
+        Database.database().reference(withPath: "likes").child(postId).updateChildValues(values) { (error, reference) in
+            if let error = error {
+                print("Failed to save likes to database: ", error.localizedDescription)
+            }
+            
+            post.isLiked = !post.isLiked
+            self.posts[indexPath.item] = post
+            self.collectionView.reloadItems(at: [indexPath])
+            print("Successfully saved!")
+        }
     }
 }
 
