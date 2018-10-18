@@ -9,7 +9,15 @@
 import UIKit
 import Firebase
 
+protocol UserProfileHeaderDelegate: class {
+    func didChangeToGridView()
+    func didChangeToListView()
+}
+
+
 class UserProfileHeader: UICollectionReusableView {
+    
+    weak var delegate: UserProfileHeaderDelegate?
     
     var user: User? {
         didSet {
@@ -41,6 +49,7 @@ class UserProfileHeader: UICollectionReusableView {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
         
+        button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
     
@@ -49,6 +58,7 @@ class UserProfileHeader: UICollectionReusableView {
         button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
         button.tintColor = UIColor.lightGray
         
+        button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
     }()
     
@@ -201,6 +211,19 @@ class UserProfileHeader: UICollectionReusableView {
                 }
             }
         }
+    }
+    
+    @objc fileprivate func handleChangeToListView() {
+        listButton.tintColor = Colors.mainBlue
+        gridButton.tintColor = UIColor.lightGray
+        delegate?.didChangeToListView()
+    }
+    
+    @objc fileprivate func handleChangeToGridView() {
+        gridButton.tintColor = Colors.mainBlue
+        listButton.tintColor = UIColor.lightGray
+        delegate?.didChangeToGridView()
+        
     }
     
     fileprivate func setupEditFollowButton() {

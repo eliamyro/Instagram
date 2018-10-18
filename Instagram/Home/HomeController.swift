@@ -149,7 +149,7 @@ extension HomeController: HomePostDelegate {
         guard let postId = post.id else { return }
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        let values = [uid: post.isLiked == true ? nil : 1]
+        let values: [String: Any] = [uid: post.isLiked ? nil : 1]
         Database.database().reference(withPath: "likes").child(postId).updateChildValues(values) { (error, reference) in
             if let error = error {
                 print("Failed to save likes to database: ", error.localizedDescription)
